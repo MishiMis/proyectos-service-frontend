@@ -1,0 +1,107 @@
+<!-- Modal Container -->
+<div class="fixed inset-0 z-50 flex items-center justify-center">
+    <!-- Modal Content -->
+    <div class="bg-white rounded-xl shadow-xl w-full max-w-2xl max-h-[90vh] flex flex-col">
+      <!-- Modal Header -->
+      <div class="sticky top-0 bg-white z-10 flex items-center justify-between p-6 border-b border-gray-200">
+        <div>
+          <h3 class="text-xl font-bold text-gray-800">Postulantes para: Desarrollador Frontend</h3>
+          <p class="text-sm text-gray-500 mt-1">Selecciona los candidatos apropiados</p>
+        </div>
+        <button (click)="cerrarModal()" class="text-gray-400 hover:text-gray-500 transition-colors">
+          <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+          </svg>
+        </button>
+      </div>
+      
+      <!-- Modal Body -->
+      <div class="p-6 overflow-y-auto flex-grow space-y-4">
+        <!-- Módulo Alumno 1 -->
+        <div class="flex items-center justify-between p-4 border border-gray-200 rounded-lg hover:bg-gray-50 transition-colors">
+          <div class="flex items-center space-x-4">
+            <img class="h-12 w-12 rounded-full object-cover" src="https://randomuser.me/api/portraits/men/32.jpg" alt="Foto alumno">
+            <div>
+              <h4 class="font-medium text-gray-900">Carlos Mendoza</h4>
+              <p class="text-sm text-gray-500">Alumno de Ingeniería de Software</p>
+            </div>
+          </div>
+          <div class="flex space-x-2">
+            <button class="px-4 py-2 border border-[#08A3E4] text-[#08A3E4] rounded-lg hover:bg-[#08A3E4]/10 transition-colors flex items-center">
+              <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
+              </svg>
+              Ver Perfil
+            </button>
+            <button class="px-4 py-2 bg-[#08A3E4] text-white rounded-lg hover:bg-[#1140E5] transition-colors flex items-center">
+              <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+              </svg>
+              Aceptar
+            </button>
+          </div>
+        </div>
+  
+        <!-- Módulo Alumno 2 -->
+        <div class="flex items-center justify-between p-4 border border-gray-200 rounded-lg hover:bg-gray-50 transition-colors">
+          <div class="flex items-center space-x-4">
+            <img class="h-12 w-12 rounded-full object-cover" src="https://randomuser.me/api/portraits/women/44.jpg" alt="Foto alumno">
+            <div>
+              <h4 class="font-medium text-gray-900">Ana Torres</h4>
+              <p class="text-sm text-gray-500">Alumna de Diseño de Interfaces</p>
+            </div>
+          </div>
+          <div class="flex space-x-2">
+            <button class="px-4 py-2 border border-[#08A3E4] text-[#08A3E4] rounded-lg hover:bg-[#08A3E4]/10 transition-colors flex items-center">
+              <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
+              </svg>
+              Ver Perfil
+            </button>
+            <button class="px-4 py-2 bg-[#08A3E4] text-white rounded-lg hover:bg-[#1140E5] transition-colors flex items-center">
+              <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+              </svg>
+              Aceptar
+            </button>
+          </div>
+        </div>
+  
+        <!-- Módulo Alumno 3 -->
+        <div class="flex items-center justify-between p-4 border border-gray-200 rounded-lg hover:bg-gray-50 transition-colors">
+          <div class="flex items-center space-x-4">
+            <img class="h-12 w-12 rounded-full object-cover" src="https://randomuser.me/api/portraits/men/75.jpg" alt="Foto alumno">
+            <div>
+              <h4 class="font-medium text-gray-900">Luis Ramírez</h4>
+              <p class="text-sm text-gray-500">Alumno de Desarrollo Web Avanzado</p>
+            </div>
+          </div>
+          <div class="flex space-x-2">
+            <button class="px-4 py-2 border border-[#08A3E4] text-[#08A3E4] rounded-lg hover:bg-[#08A3E4]/10 transition-colors flex items-center">
+              <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
+              </svg>
+              Ver Perfil
+            </button>
+            <button class="px-4 py-2 bg-[#08A3E4] text-white rounded-lg hover:bg-[#1140E5] transition-colors flex items-center">
+              <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+              </svg>
+              Aceptar
+            </button>
+          </div>
+        </div>
+      </div>
+      
+      <!-- Modal Footer -->
+      <div class="sticky bottom-0 bg-white flex justify-between items-center p-4 border-t border-gray-200">
+        <p class="text-sm text-gray-500">3 postulantes encontrados</p>
+        <button (click)="cerrarModal()" class="px-6 py-2 bg-gray-200 text-gray-700 rounded-lg hover:bg-gray-300 transition-colors">
+          Cerrar
+        </button>
+      </div>
+    </div>
+  </div>

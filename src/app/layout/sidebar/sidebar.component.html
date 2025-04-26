@@ -1,0 +1,127 @@
+<aside 
+  [class.w-72]="!isCollapsed"
+  [class.w-16]="isCollapsed"
+  class="h-full bg-[#08A3E4] text-white transition-all duration-300 fixed md:relative z-10 shadow-xl"
+>
+  <div class="p-4 flex items-center justify-center border-b border-[#08A3E4]/30 relative">
+    @if (!isCollapsed) {
+      <div class="flex items-center space-x-3 w-full">
+        <div class="relative">
+          <img 
+            src="senati.png" 
+            class="h-7 w-7 transition-transform hover:rotate-12"
+          >
+          <span class="absolute -top-1 -right-1 h-2.5 w-2.5 bg-black rounded-full border-2 border-[#08A3E4]"></span>
+        </div>
+        <h1 class="text-xl font-bold tracking-tight text-black flex-grow">
+          SENATI AYACUCHO
+        </h1>
+        <button 
+          (click)="toggleCollapse()"
+          class="p-1.5 rounded-full hover:bg-[#08A3E4]/80 transition-all hover:scale-110"
+          aria-label="Contraer menú"
+        >
+          <div class="relative h-5 w-5">
+            <span class="absolute h-0.5 w-5 bg-black top-2 left-0 transform transition-all duration-300 -rotate-45"></span>
+            <span class="absolute h-0.5 w-5 bg-black top-2 left-0 transform transition-all duration-300 rotate-45"></span>
+          </div>
+        </button>
+      </div>
+    } @else {
+      <div class="relative">
+        <img 
+          src="senati.png" 
+          class="h-7 w-7 transition-transform hover:rotate-12 cursor-pointer"
+          (click)="toggleCollapse()"
+        >
+        <span class="absolute -top-1 -right-1 h-2.5 w-2.5 bg-black rounded-full border-2 border-[#08A3E4]"></span>
+      </div>
+    }
+  </div>
+
+  <nav class="mt-6 px-2">
+    <ul class="space-y-1">
+      <li>
+        <a 
+          routerLink="/dashboard" 
+          routerLinkActive="bg-black/10 shadow-lg"
+          class="flex items-center p-2.5 hover:bg-black/10 transition-all rounded-lg group border border-transparent hover:border-black/10 justify-center"
+          [class.justify-start]="!isCollapsed"
+        >
+          <div class="p-1.5 rounded-lg bg-black/10">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-black" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zM14 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z" />
+            </svg>
+          </div>
+          @if (!isCollapsed) {
+            <span class="ml-3 font-medium text-black text-sm">Dashboard</span>
+          }
+        </a>
+      </li>
+      
+      <li>
+        <a 
+          routerLink="/products" 
+          routerLinkActive="bg-black/10 shadow-lg"
+          class="flex items-center p-2.5 hover:bg-black/10 transition-all rounded-lg group border border-transparent hover:border-black/10 justify-center"
+          [class.justify-start]="!isCollapsed"
+        >
+          <div class="p-1.5 rounded-lg bg-black/10">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-black" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4" />
+            </svg>
+          </div>
+          @if (!isCollapsed) {
+            <span class="ml-3 font-medium text-black text-sm">Productos</span>
+          }
+        </a>
+      </li>
+      <li>
+        <a 
+          routerLink="/puestos" 
+          routerLinkActive="bg-black/10 shadow-lg"
+          class="flex items-center p-2.5 hover:bg-black/10 transition-all rounded-lg group border border-transparent hover:border-black/10 justify-center"
+          [class.justify-start]="!isCollapsed"
+        >
+          <div class="p-1.5 rounded-lg bg-black/10">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-black" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4" />
+            </svg>
+          </div>
+          @if (!isCollapsed) {
+            <span class="ml-3 font-medium text-black text-sm">Puestos de Trabajo</span>
+          }
+        </a>
+    </li>
+    </ul>
+  </nav>
+
+  <div class="absolute bottom-0 w-full p-3 bg-[#08A3E4]/90 border-t border-[#08A3E4]/30">
+    <div class="flex items-center justify-center" [class.justify-between]="!isCollapsed">
+      <div class="flex items-center">
+        <div class="relative">
+          <img 
+            src="images.png" 
+            class="h-8 w-8 rounded-full object-cover border-2 border-white hover:border-black transition-all"
+            [class.cursor-pointer]="isCollapsed"
+            (click)="isCollapsed ? toggleCollapse() : null"
+          >
+          <span class="absolute bottom-0 right-0 h-2.5 w-2.5 bg-black rounded-full border-2 border-[#08A3E4]"></span>
+        </div>
+        @if (!isCollapsed) {
+          <div class="ml-3">
+            <p class="text-sm font-medium text-black">Aaron Peralta</p>
+            <p class="text-xs text-black/80">Admin</p>
+          </div>
+        }
+      </div>
+      @if (!isCollapsed) {
+        <button class="p-1 rounded-lg hover:bg-black/10 transition-all">
+          <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-black" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 12h.01M12 12h.01M19 12h.01M6 12a1 1 0 11-2 0 1 1 0 012 0zm7 0a1 1 0 11-2 0 1 1 0 012 0zm7 0a1 1 0 11-2 0 1 1 0 012 0z" />
+          </svg>
+        </button>
+      }
+    </div>
+  </div>
+</aside>
