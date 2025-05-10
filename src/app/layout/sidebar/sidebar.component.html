@@ -3,80 +3,99 @@
   [class.w-20]="isCollapsed"
   class="h-full bg-gradient-to-b from-gray-900 to-gray-800 text-white transition-all duration-300 fixed md:relative z-10"
 >
-  <!-- Header -->
-  <div class="p-5 flex items-center justify-between border-b border-gray-700">
-    @if (!isCollapsed) {
-      <div class="flex items-center space-x-3">
-        <div class="bg-indigo-600 p-2 rounded-lg">
-          <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 3v2m6-2v2M9 19v2m6-2v2M5 9H3m2 6H3m18-6h-2m2 6h-2M7 19h10a2 2 0 002-2V7a2 2 0 00-2-2H7a2 2 0 00-2 2v10a2 2 0 002 2z" />
-          </svg>
-        </div>
-        <h1 class="text-xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-indigo-400 to-purple-400">
-          SENATI
-        </h1>
-      </div>
-    } @else {
-      <div class="bg-indigo-600 p-2 rounded-lg mx-auto">
-        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 3v2m6-2v2M9 19v2m6-2v2M5 9H3m2 6H3m18-6h-2m2 6h-2M7 19h10a2 2 0 002-2V7a2 2 0 00-2-2H7a2 2 0 00-2 2v10a2 2 0 002 2z" />
-        </svg>
-      </div>
-    }
-    <button 
-      (click)="toggleCollapse()"
-      class="text-gray-400 hover:text-white transition-colors"
-      aria-label="Toggle sidebar"
+<div class="p-5 flex items-center justify-between border-b border-gray-700 transition-all duration-300 ease-in-out">
+    <div 
+        [class.w-full]="!isCollapsed"
+        [class.w-13]="isCollapsed"
+        class="flex items-center overflow-hidden transition-all duration-300 ease-in-out"
     >
-      <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
-      </svg>
-    </button>
-  </div>
+        @if (!isCollapsed) {
+            <div class="flex items-center space-x-3 min-w-max">
+                <div class="bg-indigo-600 p-2 rounded-lg w-13 h-13 flex-shrink-0">
+                    <img src="si.png" alt="Logo" class="w-full h-full object-contain">
+                </div>
+                <h1 class="text-xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-indigo-400 to-purple-400 whitespace-nowrap">
+                    SOFTWARE
+                </h1>
+            </div>
+        } @else {
+            <div class="bg-indigo-600 p-2 rounded-lg mx-auto w-13 h-13">
+                <img src="si.png" alt="Logo" class="w-full h-full object-contain">
+            </div>
+        }
+    </div>
 
-  <nav class="mt-6 px-3">
-    <ul class="space-y-2">
-      <li *ngFor="let item of navItems">
+    <button 
+        (click)="toggleCollapse()"
+        class="text-gray-400 hover:text-white transition-colors flex-shrink-0 ml-2"
+        aria-label="Toggle sidebar"
+    >
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 transform transition-transform duration-300" 
+             [class.rotate-180]="isCollapsed" 
+             fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
+        </svg>
+    </button>
+</div>
+
+<nav class="mt-6 px-3">
+  <ul class="space-y-2">
+    @for (item of navItems; track item.path) {
+      <li>
         <a 
           [routerLink]="item.path" 
           [routerLinkActive]="item.activeClass"
           class="flex items-center p-3 rounded-lg hover:bg-gray-700 transition-all group"
           [class.justify-center]="isCollapsed"
         >
-          <div class="text-indigo-400 group-hover:text-indigo-300">
-            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" [attr.d]="item.icon" />
-            </svg>
+          <div
+            class="text-indigo-400 group-hover:text-indigo-300"
+            [matTooltip]="isCollapsed ? item.title : null"
+            matTooltipPosition="right"
+          >
+            <mat-icon class="!w-5 !h-5">{{ item.icon }}</mat-icon>
           </div>
           @if (!isCollapsed) {
             <span class="ml-3 font-medium">{{ item.title }}</span>
           }
         </a>
       </li>
-    </ul>
-  </nav>
+    }
+  </ul>
+</nav>
 
-  <div class="absolute bottom-0 w-full p-4 bg-gray-800 border-t border-gray-700">
-    <div class="flex items-center" [class.justify-center]="isCollapsed">
-      <div class="relative">
-        <img 
-          src="images.png" 
-          class="h-10 w-10 rounded-full object-cover border-2 border-gray-600 hover:border-indigo-400 transition-all cursor-pointer"
-          (click)="isCollapsed ? toggleCollapse() : null"
-        >
-        <span class="absolute bottom-0 right-0 h-3 w-3 bg-green-500 rounded-full border-2 border-gray-800"></span>
-      </div>
-      @if (!isCollapsed) {
-        <div class="ml-3 flex-1">
-          <p class="text-sm font-medium">Aaron Peralta</p>
-          <p class="text-xs text-gray-400">Admin</p>
-        </div>
-        <button class="text-gray-400 hover:text-white">
-          <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 12h.01M12 12h.01M19 12h.01M6 12a1 1 0 11-2 0 1 1 0 012 0zm7 0a1 1 0 11-2 0 1 1 0 012 0zm7 0a1 1 0 11-2 0 1 1 0 012 0z" />
-          </svg>
-        </button>
-      }
+
+<div class="absolute bottom-0 w-full p-4 bg-gray-800 border-t border-gray-700 transition-all duration-300">
+  <div class="flex items-center" [class.justify-center]="isCollapsed">
+    <div class="relative transition-all duration-300"
+         [class.mx-auto]="isCollapsed">
+      <img 
+        src="images.png" 
+        class="h-10 w-10 rounded-full object-cover border-2 border-gray-600 hover:border-indigo-400 transition-all cursor-pointer"
+        (click)="isCollapsed ? toggleCollapse() : null"
+      >
+      <span class="absolute bottom-0 right-0 h-3 w-3 bg-green-500 rounded-full border-2 border-gray-800"></span>
     </div>
+    <div class="overflow-hidden transition-all duration-300 ease-in-out"
+         [class.w-0]="isCollapsed"
+         [class.ml-3]="!isCollapsed"
+         [class.opacity-0]="isCollapsed"
+         [class.opacity-100]="!isCollapsed"
+         [class.flex-1]="!isCollapsed">
+      <div class="whitespace-nowrap min-w-[120px]">
+        <p class="text-sm font-medium">Felix Cesar Escalante</p>
+        <p class="text-xs text-gray-400">Admin</p>
+      </div>
+    </div>
+    <button class="text-gray-400 hover:text-white transition-opacity duration-300"
+            [class.opacity-0]="isCollapsed"
+            [class.absolute]="isCollapsed"
+            [class.-right-2]="isCollapsed"
+            [class.opacity-100]="!isCollapsed">
+      <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 12h.01M12 12h.01M19 12h.01M6 12a1 1 0 11-2 0 1 1 0 012 0zm7 0a1 1 0 11-2 0 1 1 0 012 0zm7 0a1 1 0 11-2 0 1 1 0 012 0z" />
+      </svg>
+    </button>
   </div>
+</div>
 </aside>

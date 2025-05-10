@@ -1,9 +1,1 @@
-<div class="flex h-screen bg-gray-100">
-  <app-sidebar [(isCollapsed)]="isSidebarCollapsed"></app-sidebar>
-  
-  <div class="flex-1 flex flex-col overflow-hidden">
-    <app-header (toggleSidebar)="toggleSidebar()"></app-header>
-    <app-content [isSidebarCollapsed]="isSidebarCollapsed"></app-content>
-  </div>
-
-</div>
+<router-outlet></router-outlet>

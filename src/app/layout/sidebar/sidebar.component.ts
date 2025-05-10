@@ -2,12 +2,14 @@ import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { RouterLink, RouterLinkActive } from '@angular/router';
 import { NAV_ITEMS } from './sidebar.config';
 import { NavItem } from './sidebar.model';
+import { MatIconModule } from '@angular/material/icon';
+import { MatTooltipModule } from '@angular/material/tooltip';
 import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'app-sidebar',
   standalone: true,
-  imports: [RouterLink, RouterLinkActive, CommonModule],
+  imports: [RouterLink, RouterLinkActive, CommonModule, MatIconModule, MatTooltipModule],
   templateUrl: './sidebar.component.html',
   styleUrls: ['./sidebar.component.css']
 })

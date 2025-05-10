@@ -1,18 +1,18 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { PracticaLaboralComponent } from './practica-laboral.component';
+import { IndexComponent } from './index.component';
 
-describe('PracticaLaboralComponent', () => {
-  let component: PracticaLaboralComponent;
-  let fixture: ComponentFixture<PracticaLaboralComponent>;
+describe('IndexComponent', () => {
+  let component: IndexComponent;
+  let fixture: ComponentFixture<IndexComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [PracticaLaboralComponent]
+      imports: [IndexComponent]
     })
     .compileComponents();
 
-    fixture = TestBed.createComponent(PracticaLaboralComponent);
+    fixture = TestBed.createComponent(IndexComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

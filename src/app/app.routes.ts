@@ -1,26 +1,23 @@
 import { Routes } from '@angular/router';
-import { DashboardComponent } from './dashboard/dashboard.component';
-import { ProductsComponent } from './products/products.component';
-import { PuestosComponent } from './puestos/puestos.component';
-
+import { DashboardComponent } from './pages/DashboardComponents/dashboard/dashboard.component';
+import { IndexComponent } from './layout/index/index.component';
 
 export const routes: Routes = [
-    { 
-      path: 'dashboard', 
-      component: DashboardComponent,
-      data: { title: 'Dashboard' }
-    },
-    { 
-      path: 'products', 
-      component: ProductsComponent,
-      data: { title: 'Productos' }
-    },
-    { 
-        path: 'puestos', 
-        component: PuestosComponent,
-        data: { title: 'Puestos' }
+  {
+    path: '',
+    component: IndexComponent,
+    children: [
+      {
+        path: 'dashboard',
+        component: DashboardComponent,
+        data: { title: 'Dashboard' }
       },
-    { path: '', redirectTo: '/dashboard', pathMatch: 'full' },
-    { path: '**', redirectTo: '/dashboard' }
-  ];
-  
+      {
+        path: '',
+        redirectTo: 'dashboard',
+        pathMatch: 'full'
+      }
+    ]
+  },
+  { path: '**', redirectTo: '' }
+];
