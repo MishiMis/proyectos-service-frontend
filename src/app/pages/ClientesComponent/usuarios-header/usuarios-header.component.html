@@ -1,0 +1,33 @@
+<section class="bg-white p-6 rounded-lg shadow-sm border-b border-gray-100 mb-8">
+  <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
+    <header>
+      <h1 class="text-2xl md:text-3xl font-semibold text-[#121A2A] mb-1">
+        Gestión de Usuarios
+      </h1>
+      <p class="text-gray-500 text-sm md:text-base">
+        Administra los usuarios de tu plataforma
+      </p>
+    </header>
+    
+    <div class="flex flex-wrap gap-3" role="toolbar" aria-label="Acciones de usuario">
+      <app-button 
+        text="Importar datos" 
+        icon="upload"
+        aria-label="Importar datos de usuario"
+      ></app-button>
+      
+      <app-button 
+        text="Exportar datos" 
+        icon="download"
+        aria-label="Exportar datos de usuarios"
+      ></app-button>
+      
+      <app-button 
+        text="Nuevo usuario" 
+        icon="add"
+        aria-label="Crear nuevo usuario"
+        (click)="openModal()"
+      ></app-button>
+    </div>
+  </div>
+</section>

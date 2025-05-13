@@ -1,7 +1,10 @@
 import { Routes } from '@angular/router';
-import { DashboardComponent } from './pages/DashboardComponents/dashboard/dashboard.component';
 import { IndexComponent } from './layout/index/index.component';
 import { LoginComponent } from './pages/auth/LoginComponents/login/login.component';
+import { DashboardComponent } from './pages/DashboardComponents/dashboard/dashboard.component';
+import { authGuard } from './core/guards/auth.guard';
+import { UsuariosComponent } from './pages/ClientesComponent/usuarios/usuarios.component';
+
 export const routes: Routes = [
   {
     path: '',
@@ -11,16 +14,22 @@ export const routes: Routes = [
   {
     path: 'login',
     component: LoginComponent,
-    data: { title: 'Login' }
+    title: 'Login'
   },
   {
-    path: '',
+    path: 'index',
     component: IndexComponent,
+    canActivate: [authGuard],
     children: [
       {
         path: 'dashboard',
         component: DashboardComponent,
-        data: { title: 'Dashboard' }
+        title: 'Dashboard'
+      },
+            {
+        path: 'usuarios',
+        component: UsuariosComponent,
+        title: 'Usuarios'
       },
       {
         path: '',
