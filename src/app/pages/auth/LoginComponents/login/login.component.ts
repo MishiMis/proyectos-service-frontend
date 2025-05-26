@@ -1,38 +1,46 @@
-import { Component} from '@angular/core';
+import { Component } from '@angular/core';
 import { Router } from '@angular/router';
 import { NgForm } from '@angular/forms';
 import { MatIconModule } from '@angular/material/icon';
-import { FormsModule} from '@angular/forms';
+import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
-import { Login } from './login.interface';
+import { AuthService } from '../../../../core/service/auth.service';
 
 @Component({
   selector: 'app-login',
-  imports: [MatIconModule,CommonModule,FormsModule,],
+  standalone: true,
+  imports: [MatIconModule, CommonModule, FormsModule],
   templateUrl: './login.component.html',
-  styleUrl: './login.component.css'
+  styleUrls: ['./login.component.css']
 })
 export class LoginComponent {
   hidePassword = true;
-  model: Login = {
-    username: 'admin',
-    password: 'admin'
-  };
+  isLoading = false;
+  model = { username: '', password: '' };
 
-  constructor(private router: Router) {}
+  constructor(
+    private router: Router,
+    private authService: AuthService
+  ) {}
 
   togglePasswordVisibility(): void {
     this.hidePassword = !this.hidePassword;
   }
 
-onSubmit(form: NgForm): void {
-  if (form.valid) {
-    if (this.model.username === 'admin' && this.model.password === 'admin') {
-      localStorage.setItem('isLoggedIn', 'true');
-      this.router.navigate(['/index/dashboard']);
-    } else {
-      alert('Credenciales incorrectas');
+  onSubmit(form: NgForm): void {
+    if (form.valid && !this.isLoading) {
+      this.isLoading = true;
+      
+      this.authService.login(this.model.username, this.model.password).subscribe({
+        next: () => {
+          this.router.navigate(['/index/dashboard']);
+          this.isLoading = false;
+        },
+        error: (error) => {
+          alert(error.message);
+          this.isLoading = false;
+        }
+      });
     }
   }
-}
 }

@@ -1,28 +1,54 @@
-      <app-input-field
-        label="Nombre completo"
-        placeholder="Ingrese su nombre"
-        [required]="true"
-        color="blue">
-      </app-input-field>
-        <app-input-field
-        label="Correo electrónico"
-        mask="email"
-        [required]="true"
-        prefixIcon="✉️"
-        color="indigo">
-      </app-input-field>
-        <app-input-field
-        label="Fecha de nacimiento"
-        mask="fecha"
-        dateFormat="dd/mm/yyyy"
-        [required]="true"
-        prefixIcon="📅"
-        color="green">
-      </app-input-field>
-        <app-input-field
-        label="Fecha de inicio"
-        mask="fecha"
-        dateFormat="mm/dd/yyyy"
-        prefixIcon="📅"
-        color="purple">
-      </app-input-field>
+    <div class="fixed inset-10 bg-opacity-50 flex items-center justify-center p-4 z-50">
+      <div class="bg-white rounded-xl shadow-2xl w-full max-w-md overflow-hidden">
+        <div class="bg-gradient-to-r from-blue-600 to-indigo-600 p-6">
+          <h2 class="text-2xl font-bold text-white">Formulario de Registro</h2>
+          <p class="text-blue-100 mt-1">Complete sus datos personales</p>
+        </div>
+
+        <div class="p-6 space-y-4">
+          <app-input-field
+            label="Nombre completo"
+            placeholder="Ingrese su nombre"
+            [required]="true"
+            color="blue">
+          </app-input-field>
+
+          <app-input-field
+            label="Correo electrónico"
+            mask="email"
+            [required]="true"
+            color="indigo">
+          </app-input-field>
+
+          <div class="grid grid-cols-2 gap-4">
+            <app-input-field
+              label="Fecha de nacimiento"
+              mask="fecha"
+              dateFormat="dd/mm/yyyy"
+              [required]="true"
+              color="green">
+            </app-input-field>
+
+            <app-input-field
+              label="Fecha de inicio"
+              mask="fecha"
+              dateFormat="mm/dd/yyyy"
+              color="purple">
+            </app-input-field>
+          </div>
+        </div>
+
+        <div class="bg-gray-50 px-6 py-4 flex justify-end gap-3 border-t border-gray-200">
+          <app-button-submit
+            label="Cancelar" 
+            variant="secondary"
+            icon="close" />
+          
+          <app-button-submit
+            label="Enviar" 
+            type="submit"
+            icon="send"
+            iconPosition="right"/>
+        </div>
+      </div>
+    </div>

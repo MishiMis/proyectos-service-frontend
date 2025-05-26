@@ -5,22 +5,28 @@ import { NG_VALUE_ACCESSOR, ControlValueAccessor } from '@angular/forms';
   selector: 'app-input-field',
   template: `
     <div class="mb-4" [class.opacity-50]="disabled">
-      <label *ngIf="label" class="block text-sm font-medium text-gray-700 mb-1">
-        {{ label }}
-        <span *ngIf="required" class="text-red-500">*</span>
-      </label>
+      @if (label) {
+        <label class="block text-sm font-medium text-gray-700 mb-1">
+          {{ label }}
+          @if (required) {
+            <span class="text-red-500">*</span>
+          }
+        </label>
+      }
       
       <div class="relative rounded-md shadow-sm">
-        <div *ngIf="prefixIcon" class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-          <span class="text-gray-500">{{ prefixIcon }}</span>
-        </div>
+        @if (prefixIcon) {
+          <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-gray-500">
+            {{ prefixIcon }}
+          </div>
+        }
         
         <input
-          class="block w-full rounded-md border-gray-300 shadow-sm focus:border-{{color}}-500 focus:ring-{{color}}-500 sm:text-sm transition-all duration-200 ease-in-out"
+          class="block w-full rounded-md border border-gray-300 px-3 py-2 text-sm text-gray-900 focus:outline-none focus:ring-1 focus:ring-blue-500 focus:border-blue-500 transition-colors"
           [class.pl-10]="prefixIcon"
           [class.pr-10]="suffixIcon"
           [class.border-red-300]="hasError()"
-          [class.bg-gray-100]="readonly"
+          [class.bg-gray-50]="readonly || disabled"
           [type]="type"
           [placeholder]="getPlaceholder()"
           [readonly]="readonly"
@@ -31,15 +37,22 @@ import { NG_VALUE_ACCESSOR, ControlValueAccessor } from '@angular/forms';
           (keydown)="onKeyDown($event)"
         >
         
-        <div *ngIf="suffixIcon" class="absolute inset-y-0 right-0 pr-3 flex items-center pointer-events-none">
-          <span class="text-gray-500">{{ suffixIcon }}</span>
-        </div>
+        @if (suffixIcon) {
+          <div class="absolute inset-y-0 right-0 pr-3 flex items-center pointer-events-none text-gray-500">
+            {{ suffixIcon }}
+          </div>
+        }
       </div>
       
-      <p *ngIf="hint && !hasError()" class="mt-1 text-sm text-gray-500">{{ hint }}</p>
-      <p *ngIf="hasError()" class="mt-1 text-sm text-red-600">{{ getErrorMessage() }}</p>
+      @if (hint && !hasError()) {
+        <p class="mt-1 text-sm text-gray-500">{{ hint }}</p>
+      }
+      @if (hasError()) {
+        <p class="mt-1 text-sm text-red-600">{{ getErrorMessage() }}</p>
+      }
     </div>
   `,
+  standalone: true,
   providers: [
     {
       provide: NG_VALUE_ACCESSOR,
@@ -58,7 +71,6 @@ export class InputFieldComponent implements ControlValueAccessor, OnChanges {
   @Input() hint: string = '';
   @Input() prefixIcon: string = '';
   @Input() suffixIcon: string = '';
-  @Input() color: string = 'indigo';
   @Input() mask: 'fecha' | 'email' | 'none' = 'none';
   @Input() dateFormat: 'dd/mm/yyyy' | 'mm/dd/yyyy' = 'dd/mm/yyyy';
 
@@ -87,12 +99,12 @@ export class InputFieldComponent implements ControlValueAccessor, OnChanges {
     this.onTouched = fn;
   }
 
-  setDisabledState?(isDisabled: boolean): void {
+  setDisabledState(isDisabled: boolean): void {
     this.disabled = isDisabled;
   }
 
-  onInputChange(event: any) {
-    const value = event.target.value;
+  onInputChange(event: Event) {
+    const value = (event.target as HTMLInputElement).value;
     this.applyMask(value);
   }
 
@@ -121,13 +133,22 @@ export class InputFieldComponent implements ControlValueAccessor, OnChanges {
     return '';
   }
 
-  onKeyDown(event: KeyboardEvent) {
-    if (this.mask === 'fecha') {
-      if (!/[0-9]|Backspace|Delete|ArrowLeft|ArrowRight|Tab/.test(event.key)) {
-        event.preventDefault();
-      }
+onKeyDown(event: KeyboardEvent) {
+  if (this.mask === 'fecha') {
+    if (!/[0-9]|Backspace|Delete|ArrowLeft|ArrowRight|Tab/.test(event.key)) {
+      event.preventDefault();
+      return;
+    }
+
+    const input = event.target as HTMLInputElement;
+    const currentValue = input.value.replace(/\D/g, '');
+    
+    if (currentValue.length >= 8 && 
+        !['Backspace', 'Delete', 'ArrowLeft', 'ArrowRight', 'Tab'].includes(event.key)) {
+      event.preventDefault();
     }
   }
+}
 
   getPlaceholder(): string {
     if (this.placeholder) return this.placeholder;
@@ -156,56 +177,56 @@ export class InputFieldComponent implements ControlValueAccessor, OnChanges {
     }
   }
 
-  private applyMask(value: string) {
-    let rawValue = value;
-    
-    switch (this.mask) {
-      case 'fecha':
-        rawValue = this.removeMask(value);
-        this.value = rawValue.slice(0, 8);
-        this.formattedValue = this.formatFecha(this.value);
-        break;
-      case 'email':
-        this.value = value;
-        this.formattedValue = value;
-        break;
-      default:
-        this.value = value;
-        this.formattedValue = value;
-    }
-
-    this.onChange(this.value);
+private applyMask(value: string) {
+  let rawValue = value;
+  
+  switch (this.mask) {
+    case 'fecha':
+      rawValue = this.removeMask(value);
+      this.value = rawValue.slice(0, 8);
+      this.formattedValue = this.formatFecha(this.value);
+      break;
+    case 'email':
+      this.value = value;
+      this.formattedValue = value;
+      break;
+    default:
+      this.value = value;
+      this.formattedValue = value;
   }
 
-  private formatFecha(value: string): string {
-    if (!value) return '';
-    
-    const numbers = value.replace(/\D/g, '');
-    
-    if (this.dateFormat === 'dd/mm/yyyy') {
-      const day = numbers.slice(0, 2);
-      const month = numbers.slice(2, 4);
-      const year = numbers.slice(4, 8);
+  this.onChange(this.value);
+}
 
-      let formatted = '';
-      if (day) formatted += `${day}`;
-      if (month) formatted += `/${month}`;
-      if (year) formatted += `/${year}`;
+private formatFecha(value: string): string {
+  if (!value) return '';
+  
+  const numbers = value.replace(/\D/g, '');
+  
+  if (this.dateFormat === 'dd/mm/yyyy') {
+    const day = numbers.slice(0, 2);
+    const month = numbers.slice(2, 4);
+    const year = numbers.slice(4, 8);
 
-      return formatted;
-    } else {
-      const month = numbers.slice(0, 2);
-      const day = numbers.slice(2, 4);
-      const year = numbers.slice(4, 8);
+    let formatted = '';
+    if (day) formatted += `${day}`;
+    if (month) formatted += `/${month}`;
+    if (year) formatted += `/${year.slice(0, 4)}`;
 
-      let formatted = '';
-      if (month) formatted += `${month}`;
-      if (day) formatted += `/${day}`;
-      if (year) formatted += `/${year}`;
+    return formatted;
+  } else {
+    const month = numbers.slice(0, 2);
+    const day = numbers.slice(2, 4);
+    const year = numbers.slice(4, 8);
 
-      return formatted;
-    }
+    let formatted = '';
+    if (month) formatted += `${month}`;
+    if (day) formatted += `/${day}`;
+    if (year) formatted += `/${year.slice(0, 4)}`;
+
+    return formatted;
   }
+}
 
   private removeMask(value: string): string {
     return value.replace(/\D/g, '');
