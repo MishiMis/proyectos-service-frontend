@@ -1,8 +1,10 @@
+import { CommonModule } from '@angular/common';
 import { Component, Input, forwardRef, OnChanges, SimpleChanges } from '@angular/core';
-import { NG_VALUE_ACCESSOR, ControlValueAccessor } from '@angular/forms';
+import { NG_VALUE_ACCESSOR, ControlValueAccessor, FormsModule } from '@angular/forms';
 
 @Component({
   selector: 'app-input-field',
+  imports:[CommonModule,FormsModule],
   template: `
     <div class="mb-4" [class.opacity-50]="disabled">
       @if (label) {

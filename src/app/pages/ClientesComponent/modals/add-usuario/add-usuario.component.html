@@ -1,54 +1,107 @@
-    <div class="fixed inset-10 bg-opacity-50 flex items-center justify-center p-4 z-50">
-      <div class="bg-white rounded-xl shadow-2xl w-full max-w-md overflow-hidden">
-        <div class="bg-gradient-to-r from-blue-600 to-indigo-600 p-6">
-          <h2 class="text-2xl font-bold text-white">Formulario de Registro</h2>
-          <p class="text-blue-100 mt-1">Complete sus datos personales</p>
-        </div>
-
-        <div class="p-6 space-y-4">
-          <app-input-field
-            label="Nombre completo"
-            placeholder="Ingrese su nombre"
-            [required]="true"
-            color="blue">
-          </app-input-field>
-
-          <app-input-field
-            label="Correo electrónico"
-            mask="email"
-            [required]="true"
-            color="indigo">
-          </app-input-field>
-
-          <div class="grid grid-cols-2 gap-4">
-            <app-input-field
-              label="Fecha de nacimiento"
-              mask="fecha"
-              dateFormat="dd/mm/yyyy"
-              [required]="true"
-              color="green">
-            </app-input-field>
-
-            <app-input-field
-              label="Fecha de inicio"
-              mask="fecha"
-              dateFormat="mm/dd/yyyy"
-              color="purple">
-            </app-input-field>
-          </div>
-        </div>
-
-        <div class="bg-gray-50 px-6 py-4 flex justify-end gap-3 border-t border-gray-200">
-          <app-button-submit
-            label="Cancelar" 
-            variant="secondary"
-            icon="close" />
-          
-          <app-button-submit
-            label="Enviar" 
-            type="submit"
-            icon="send"
-            iconPosition="right"/>
-        </div>
-      </div>
+<div class="fixed inset-0 bg-opacity-50 flex items-center justify-center p-4 z-50">
+  <div class="bg-white rounded-xl shadow-2xl w-full max-w-md max-h-[90vh] flex flex-col overflow-hidden">
+    <div class="bg-gradient-to-r from-[#4F39F6] via-[#A181FF] to-[#BD7CFF] p-4 shrink-0">
+      <h2 class="text-xl font-bold text-white">Formulario de Registro</h2>
     </div>
+
+    <form class="p-6 space-y-6 overflow-y-auto" (ngSubmit)="onSubmit()">
+      <div class="space-y-4 border-b pb-6">
+        <h3 class="text-lg font-semibold text-gray-700 mb-3">Credenciales de Acceso</h3>
+        
+        <app-input-field
+          label="Nombre de usuario"
+          [(ngModel)]="formData.username"
+          name="username"
+          placeholder="Ej: admin"
+          [required]="true"
+          color="blue">
+        </app-input-field>
+
+        <app-input-field
+          label="Contraseña"
+          [(ngModel)]="formData.password"
+          name="password"
+          type="password"
+          [required]="true"
+          color="indigo">
+        </app-input-field>
+      </div>
+
+      <!-- Sección Datos Personales -->
+      <div class="space-y-4 border-b pb-6">
+        <h3 class="text-lg font-semibold text-gray-700 mb-3">Datos Personales</h3>
+
+        <div class="grid grid-cols-2 gap-4">
+          <app-input-field
+            label="Nombres"
+            [(ngModel)]="formData.personalData.firstName"
+            name="firstName"
+            placeholder="Ej: Juan"
+            [required]="true"
+            color="green">
+          </app-input-field>
+
+          <app-input-field
+            label="Apellidos"
+            [(ngModel)]="formData.personalData.lastName"
+            name="lastName"
+            placeholder="Ej: Pérez"
+            [required]="true"
+            color="purple">
+          </app-input-field>
+        </div>
+
+        <app-input-field
+          label="Dirección"
+          [(ngModel)]="formData.personalData.address"
+          name="address"
+          placeholder="Ej: Av. Ayacucho 123"
+          [required]="true"
+          color="blue">
+        </app-input-field>
+
+        <app-input-field
+          label="Teléfono"
+          [(ngModel)]="formData.personalData.phone"
+          name="phone"
+          placeholder="Ej: +51987654321"
+          [required]="true"
+          color="indigo">
+        </app-input-field>
+
+        <app-input-field
+          label="DNI"
+          [(ngModel)]="formData.personalData.dni"
+          name="dni"
+          placeholder="Ej: 12345678"
+          [required]="true"
+          color="green">
+        </app-input-field>
+
+        <app-input-field
+          label="Fecha de Nacimiento"
+          [(ngModel)]="formData.personalData.birthDate"
+          name="birthDate"
+          type="date"
+          [required]="true"
+          color="purple">
+        </app-input-field>
+      </div>
+
+      <div class="bg-gray-50 px-6 py-4 flex justify-end gap-3 border-t border-gray-200 shrink-0">
+        <app-button-submit
+          label="Cancelar" 
+          variant="secondary"
+          icon="close"
+          (click)="onCancel()" />
+        
+        <app-button-submit
+          label="Registrar" 
+          type="submit"
+          icon="save"
+          iconPosition="right"
+          [disabled]="!formValid()" />
+      </div>
+    </form>
+  </div>
+</div>
