@@ -6,11 +6,11 @@ import { DataService } from '../../../core/service/data.service';
 import { CommonModule } from '@angular/common';
 import { AddActivitieComponent } from '../modals/add-activitie/add-activitie.component';
 import { AddTaskComponent } from '../modals/add-task/add-task.component';
-import { FormsModule } from '@angular/forms';
+import { MatIconModule } from '@angular/material/icon';
 
 @Component({
   selector: 'app-proyectos',
-  imports: [ButtonComponent, CommonModule, FormsModule],
+  imports: [ButtonComponent, CommonModule,MatIconModule],
   templateUrl: './proyectos.component.html',
   styleUrl: './proyectos.component.css'
 })
@@ -20,8 +20,8 @@ export class ProyectosComponent {
   selectedProject: any = null;
   availableUsers: any[] = [];
   projectActivities: { [projectId: string]: any[] } = {};
-  tasksByActivity: { [activityId: string]: any[] } = {}; // Nuevo objeto para almacenar tareas por actividad
-  expandedActivities: { [activityId: string]: boolean } = {}; // Para controlar qué actividades están expandidas
+  tasksByActivity: { [activityId: string]: any[] } = {};
+  expandedActivities: { [activityId: string]: boolean } = {};
 
   projects: any[] = [];
   expandedProjectId: string | null = null;
@@ -65,6 +65,25 @@ export class ProyectosComponent {
       );
     }
   }
+  changeStatus(activityId: string): void {
+  this.DataService.toggleActivityStatus(activityId).subscribe({
+    next: (response) => {
+      if (this.expandedProjectId) {
+        this.DataService.getProjectById(this.expandedProjectId).subscribe(
+          (activities: any[]) => {
+            this.activitiesByProject[this.expandedProjectId!] = activities;
+          },
+          error => {
+            console.error('Error al actualizar actividades:', error);
+          }
+        );
+      }
+    },
+    error: (err) => {
+      console.error('Error al cambiar estado', err);
+    }
+  });
+}
 
   loadTasksForActivity(activityId: string): void {
     this.DataService.getTaskById(activityId).subscribe(
@@ -126,7 +145,4 @@ export class ProyectosComponent {
     });
   }
 
-  addActivity(projectId: string): void {
-    console.log('Agregar actividad al proyecto:', projectId);
-  }
 }

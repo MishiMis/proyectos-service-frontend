@@ -1,0 +1,56 @@
+<div class="bg-white rounded-lg shadow-md p-4 w-full max-w-xs">
+  <h2 class="text-lg font-bold text-gray-800 mb-4">Último Registro</h2>
+  
+  @if (loading) {
+    <div class="flex flex-col items-center justify-center py-4">
+      <mat-spinner diameter="40" class="mb-2"></mat-spinner>
+      <p class="text-sm text-gray-600">Cargando...</p>
+    </div>
+  }
+
+  @if (error) {
+    <div class="flex items-center bg-red-100 border-l-4 border-red-500 text-red-700 p-2 text-xs mb-2">
+      <mat-icon class="mr-1" style="font-size: 16px;">error_outline</mat-icon>
+      <p>{{ error }}</p>
+    </div>
+  }
+
+  @if (lastUser && !loading) {
+    <div class="space-y-3">
+      <div class="flex items-center space-x-2">
+        <div class="bg-blue-100 p-2 rounded-full">
+          <mat-icon class="text-blue-600" style="width: 30px; height: 30px; font-size: 30px;">account_circle</mat-icon>
+        </div>
+        <div>
+          <h3 class="text-sm font-semibold text-gray-800 truncate">{{ lastUser.personalData.firstName }} {{ lastUser.personalData.lastName }}</h3>
+          <p class="text-xs text-gray-600 truncate">{{ lastUser.username }}</p>
+        </div>
+      </div>
+
+      <div class="space-y-2">
+        <div class="flex items-center text-sm">
+          <mat-icon class="text-gray-500 mr-1" style="font-size: 18px;">cake</mat-icon>
+          <span>{{ formatShortDate(lastUser.personalData.birthDate) }}</span>
+        </div>
+        
+        <div class="flex items-center text-sm">
+          <mat-icon 
+            class="mr-1" 
+            style="font-size: 18px;"
+            [class.text-green-600]="lastUser.isActive" 
+            [class.text-red-600]="!lastUser.isActive">
+            {{ lastUser.isActive ? 'check_circle' : 'cancel' }}
+          </mat-icon>
+          <span [class.text-green-600]="lastUser.isActive" [class.text-red-600]="!lastUser.isActive">
+            {{ lastUser.isActive ? 'Activo' : 'Inactivo' }}
+          </span>
+        </div>
+
+        <div class="flex items-center text-xs text-gray-500">
+          <mat-icon class="mr-1" style="font-size: 16px;">calendar_today</mat-icon>
+          <span>Registro: {{ formatShortDate(lastUser.createdAt) }}</span>
+        </div>
+      </div>
+    </div>
+  }
+</div>

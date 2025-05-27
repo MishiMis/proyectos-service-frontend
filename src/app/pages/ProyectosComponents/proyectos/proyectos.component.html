@@ -6,203 +6,243 @@
       </h1>
       <p class="text-gray-500 text-sm md:text-base">
         Administra los proyectos de tu organización
-    </p>
+      </p>
     </header>
-    
-    <div class="flex flex-wrap gap-3" role="toolbar" aria-label="Acciones de usuario">
 
-      
-      <app-button 
-        text="Nuevo proyecto" 
-        icon="add"
-        aria-label="Crear nuevo proyectp"
-        (click)="openModal()"
-      ></app-button>
+    <div class="flex flex-wrap gap-3" role="toolbar" aria-label="Acciones de usuario">
+      <app-button text="Nuevo proyecto" icon="add" aria-label="Crear nuevo proyecto" (click)="openModal()"></app-button>
     </div>
   </div>
 </section>
-<div class="">
-  <div class="space-y-4">
-    <div *ngFor="let project of projects" class="bg-white rounded-lg shadow-md overflow-hidden border border-gray-200">
-      <button 
-        (click)="toggleProject(project._id)"
-        class="w-full flex justify-between items-center p-4 md:p-6 focus:outline-none hover:bg-gray-50 transition-colors"
-      >
-        <div class="text-left flex-1 min-w-0">
-          <h2 class="text-lg md:text-xl font-semibold text-gray-800 truncate">{{ project.name }}</h2>
-          <div class="flex flex-wrap items-center mt-2 gap-2">
-            <span class="px-2 py-1 rounded-full text-xs md:text-sm font-medium whitespace-nowrap" 
-                  [ngClass]="{
+
+<div class="space-y-4">
+  @for (project of projects; track project._id) {
+  <div class="bg-white rounded-lg shadow-md overflow-hidden border border-gray-200 transition-all hover:shadow-lg">
+    <button (click)="toggleProject(project._id)"
+      class="w-full flex justify-between items-center p-4 md:p-6 focus:outline-none hover:bg-gray-50 transition-colors">
+      <div class="text-left flex-1 min-w-0">
+        <h2 class="text-lg md:text-xl font-semibold text-gray-800 truncate">{{ project.name }}</h2>
+        <div class="flex flex-wrap items-center mt-2 gap-2">
+          <span class="px-2 py-1 rounded-full text-xs md:text-sm font-medium whitespace-nowrap" [ngClass]="{
                     'bg-yellow-100 text-yellow-800': project.status === 'en_progreso',
                     'bg-green-100 text-green-800': project.status === 'completado',
                     'bg-blue-100 text-blue-800': project.status === 'pendiente'
                   }">
-              {{ project.status }}
-            </span>
+            {{ project.status | titlecase }}
+          </span>
+          <span class="text-gray-600 text-xs md:text-sm whitespace-nowrap">
+            {{ project.startDate | date:'shortDate' }} - {{ project.endDate | date:'shortDate' }}
+          </span>
+          <div class="flex items-center">
             <span class="text-gray-600 text-xs md:text-sm whitespace-nowrap">
-              {{ project.startDate | date:'shortDate' }} - {{ project.endDate | date:'shortDate' }}
+              Progreso: {{ project.progress }}%
             </span>
-            <div class="flex items-center">
-              <span class="text-gray-600 text-xs md:text-sm whitespace-nowrap">
-                Progreso: {{ project.progress }}%
-              </span>
-              <div class="ml-2 w-16 bg-gray-200 rounded-full h-2">
-                <div class="bg-blue-600 h-2 rounded-full" [style.width.%]="project.progress"></div>
+            <div class="ml-2 w-16 bg-gray-200 rounded-full h-2">
+              <div class="bg-blue-600 h-2 rounded-full transition-all duration-300" [style.width.%]="project.progress">
               </div>
             </div>
           </div>
         </div>
-        <svg 
-          [class.transform.rotate-180]="expandedProjectId === project._id"
-          class="w-5 h-5 text-gray-600 transition-transform duration-200 flex-shrink-0 ml-2" 
-          fill="none" 
-          viewBox="0 0 24 24" 
-          stroke="currentColor"
-        >
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
-        </svg>
-      </button>
+      </div>
+      <mat-icon [class.rotate-180]="expandedProjectId === project._id"
+        class="text-gray-600 transition-transform duration-200">
+        expand_more
+      </mat-icon>
+    </button>
 
-      <div 
-        *ngIf="expandedProjectId === project._id" 
-        class="px-4 md:px-6 pb-4 md:pb-6 overflow-y-scroll max-h-[calc(100vh-200px)]"
-      >
-        <div class="border-t border-gray-200 pt-4">
-          <h3 class="text-md md:text-lg font-medium text-gray-900 mb-3">Detalles del Proyecto</h3>
-          
-          <div class="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6 mb-4 md:mb-6">
-            <div class="col-span-1 md:col-span-2">
-              <h4 class="text-xs md:text-sm font-medium text-gray-500">Descripción</h4>
-              <p class="mt-1 text-sm text-gray-900">{{ project.description }}</p>
+    @if (expandedProjectId === project._id) {
+    <div class="px-4 md:px-6 pb-4 md:pb-6 overflow-y-auto max-h-[calc(100vh-200px)]">
+      <div class="border-t border-gray-200 pt-4">
+        <h3 class="text-md md:text-lg font-medium text-gray-900 mb-3">Detalles del Proyecto</h3>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6 mb-4 md:mb-6">
+          <div class="col-span-1 md:col-span-2">
+            <h4 class="text-xs md:text-sm font-medium text-gray-500">Descripción</h4>
+            <p class="mt-1 text-sm text-gray-900">{{ project.description }}</p>
+          </div>
+
+          <div>
+            <h4 class="text-xs md:text-sm font-medium text-gray-500">Responsables</h4>
+            <div class="mt-1 flex flex-wrap gap-2">
+              @for (responsable of project.responsables; track responsable) {
+              <span
+                class="inline-flex items-center gap-1 bg-gray-100 rounded-full px-3 py-1 text-xs md:text-sm font-semibold text-gray-700">
+                <mat-icon class="text-blue-500"
+                  style="width: 12px; height: 12px; font-size: 12px;">fiber_manual_record</mat-icon>
+                {{ responsable }}
+              </span>
+              }
             </div>
-            
-            <div>
-              <h4 class="text-xs md:text-sm font-medium text-gray-500">Responsables</h4>
-              <div class="mt-1 flex flex-wrap gap-2">
-                <span *ngFor="let responsable of project.responsables" 
-                      class="inline-block bg-gray-100 rounded-full px-2 py-1 text-xs md:text-sm font-semibold text-gray-700">
-                  {{ responsable }}
-                </span>
+          </div>
+
+          <div>
+            <h4 class="text-xs md:text-sm font-medium text-gray-500">Contratistas</h4>
+            <div class="mt-1 space-y-2">
+              @for (contractor of project.contractors; track contractor.name) {
+              <div class="flex items-center gap-3">
+                <mat-icon class="text-blue-500"
+                  style="width: 12px; height: 12px; font-size: 12px;">fiber_manual_record</mat-icon>
+                <div>
+                  <p class="text-xs md:text-sm font-semibold text-gray-900">{{ contractor.name }}</p>
+                  <p class="text-xs text-gray-600">{{ contractor.contact }}</p>
+                </div>
               </div>
+              }
             </div>
-            
-            <div>
-              <h4 class="text-xs md:text-sm font-medium text-gray-500">Contratistas</h4>
-              <div class="mt-1 space-y-1">
-                <div *ngFor="let contractor of project.contractors" class="flex items-center gap-2">
-                  <span class="inline-block w-2 h-2 rounded-full bg-blue-500"></span>
-                  <div>
-                    <p class="text-xs md:text-sm font-semibold text-gray-900">{{ contractor.name }}</p>
-                    <p class="text-xs text-gray-600">{{ contractor.contact }}</p>
+          </div>
+
+          <div class="col-span-1 md:col-span-2">
+            <h4 class="text-xs md:text-sm font-medium text-gray-500">Observaciones</h4>
+            <p class="mt-1 text-sm text-gray-900">{{ project.observaciones }}</p>
+          </div>
+        </div>
+
+        <div class="mt-4 md:mt-6">
+          <div class="flex flex-col md:flex-row md:justify-between md:items-center gap-2 mb-3">
+            <h3 class="text-md md:text-lg font-medium text-gray-900">Actividades</h3>
+            <app-button text="Agregar Actividad" icon="add" aria-label="Crear nueva actividad"
+              (click)="openModalActivitie()"></app-button>
+          </div>
+
+          @if ((activitiesByProject[project._id] || []).length > 0) {
+          <div class="space-y-3">
+            @for (activity of activitiesByProject[project._id]; track activity._id) {
+            <div class="bg-white border border-gray-200 rounded-lg p-4 hover:border-blue-300 transition-colors">
+              <div class="flex justify-between items-center">
+                <div class="flex-1">
+                  <div class="flex items-center cursor-pointer" (click)="toggleActivityTasks(activity._id)">
+                    <h4 class="text-md font-semibold text-gray-800">{{ activity.name }}</h4>
+                    <mat-icon class="text-gray-500 transition-transform duration-200 ml-2"
+                      [class.rotate-180]="expandedActivities[activity._id]">
+                      expand_more
+                    </mat-icon>
+                  </div>
+                  <p class="text-sm text-gray-600 mt-1">{{ activity.description }}</p>
+                  <div class="flex flex-wrap gap-3 mt-2">
+                    <span class="text-xs px-2 py-1 rounded-full" [ngClass]="{
+                                    'bg-purple-100 text-purple-800': activity.priority === 'alta',
+                                    'bg-yellow-100 text-yellow-800': activity.priority === 'media',
+                                    'bg-green-100 text-green-800': activity.priority === 'baja'
+                                  }">
+                      Prioridad: {{ activity.priority | titlecase }}
+                    </span>
+                    <span class="text-xs px-2 py-1 rounded-full" [ngClass]="{
+                                    'bg-blue-100 text-blue-800': activity.status === 'pendiente',
+                                    'bg-yellow-100 text-yellow-800': activity.status === 'en_progreso',
+                                    'bg-green-100 text-green-800': activity.status === 'completado'
+                                  }">
+                      Estado: {{ activity.status | titlecase }}
+                    </span>
+                    <span class="text-xs text-gray-500">
+                      {{ activity.startDate | date:'shortDate' }} - {{ activity.endDate | date:'shortDate' }}
+                    </span>
+                  </div>
+                </div>
+                <div class="text-right min-w-[120px]">
+                  <p class="text-xs text-gray-500 mb-1">Asignados:</p>
+                  <div class="space-y-1">
+                    @for (user of activity.asignados; track user) {
+                    <div class="text-xs font-medium text-gray-700 flex items-center justify-end gap-1">
+                      <mat-icon class="text-blue-500"
+                        style="width: 12px; height: 12px; font-size: 12px;">fiber_manual_record</mat-icon>
+                      {{ user }}
+                    </div>
+                    }
+                  </div>
+                  <div class="flex justify-end mt-2 space-x-2">
+                    <app-button text="Asignar tarea" icon="add" size="small" aria-label="Asignar nueva tarea"
+                      (click)="openAssignTaskModal(activity._id)">
+                    </app-button>
+
+                    <app-button text="Cambiar estado" size="small" aria-label="Cambiar estado"
+                      (click)="changeStatus(activity._id)">
+                    </app-button>
                   </div>
                 </div>
               </div>
+
+              @if (expandedActivities[activity._id]) {
+              <div class="mt-4 pl-6 border-l-2 border-blue-200">
+                <h5 class="text-sm font-medium text-gray-700 mb-2">Tareas asignadas:</h5>
+
+                @if ((tasksByActivity[activity._id] || []).length > 0) {
+                <div class="space-y-2">
+                  @for (task of tasksByActivity[activity._id]; track task._id) {
+                  <div class="bg-gray-50 rounded-lg p-3 hover:bg-gray-100 transition-colors">
+                    <div class="flex justify-between items-start gap-3">
+                      <div class="flex-1">
+                        <div class="flex items-center gap-2">
+                          <h6 class="text-sm font-semibold text-gray-800">{{ task.title }}</h6>
+                          <span class="text-xs px-1.5 py-0.5 rounded-full" [ngClass]="{
+                                                'bg-red-100 text-red-800': task.prioridad === 'alta',
+                                                'bg-yellow-100 text-yellow-800': task.prioridad === 'media',
+                                                'bg-green-100 text-green-800': task.prioridad === 'baja'
+                                              }">
+                            {{ task.prioridad | titlecase }}
+                          </span>
+                        </div>
+                        <p class="text-xs text-gray-600 mt-1">{{ task.description }}</p>
+                        <div class="flex flex-wrap gap-2 mt-2">
+                          <span class="text-xs px-2 py-0.5 rounded-full" [ngClass]="{
+                                                'bg-blue-100 text-blue-800': task.status === 'pendiente',
+                                                'bg-yellow-100 text-yellow-800': task.status === 'en_progreso',
+                                                'bg-green-100 text-green-800': task.status === 'completado'
+                                              }">
+                            {{ task.status | titlecase }}
+                          </span>
+                          <span class="text-xs text-gray-500">
+                            Fecha límite: {{ task.fecha_limite | date:'shortDate' }}
+                          </span>
+                        </div>
+                        @if (task.instrucciones) {
+                        <div class="text-xs text-gray-500 mt-2">
+                          <p class="font-medium">Instrucciones:</p>
+                          <p>{{ task.instrucciones }}</p>
+                        </div>
+                        }
+                      </div>
+                      <div class="text-right min-w-[100px]">
+                        <div class="text-xs text-gray-500 mb-1">Asignados:</div>
+                        <div class="space-y-1">
+                          @for (user of task.asignados; track user) {
+                          <div class="text-xs font-medium text-gray-700 flex items-center justify-end gap-1">
+                            <mat-icon class="text-blue-500"
+                              style="width: 12px; height: 12px; font-size: 12px;">fiber_manual_record</mat-icon>
+                            {{ user }}
+                          </div>
+                          }
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  }
+                </div>
+                } @else {
+                <div class="text-center text-sm text-gray-500 py-3 bg-gray-50 rounded-lg">
+                  No hay tareas asignadas a esta actividad.
+                </div>
+                }
+              </div>
+              }
             </div>
-            
-            <div class="col-span-1 md:col-span-2">
-              <h4 class="text-xs md:text-sm font-medium text-gray-500">Observaciones</h4>
-              <p class="mt-1 text-sm text-gray-900">{{ project.observaciones }}</p>
-            </div>
+            }
           </div>
-
-          <div class="mt-4 md:mt-6">
-            <div class="flex flex-col md:flex-row md:justify-between md:items-center gap-2 mb-3">
-              <h3 class="text-md md:text-lg font-medium text-gray-900">Actividades</h3>
-                <app-button 
-                text="Agregar Actividad" 
-                icon="add"
-                aria-label="Crear nueva actividad"
-                (click)="openModalActivitie()"
-                ></app-button>
-            </div>
-
-<div *ngIf="(activitiesByProject[project._id]?.length || 0) > 0; else noActivities">
-  <!-- Lista de actividades -->
-  <div *ngFor="let activity of activitiesByProject[project._id]" class="bg-white border border-gray-200 rounded-lg p-4 mb-3">
-    <div class="flex justify-between items-center">
-      <div class="flex-1">
-        <div class="flex items-center cursor-pointer" (click)="toggleActivityTasks(activity._id)">
-          <h4 class="text-md font-semibold text-gray-800">{{ activity.name }}</h4>
-          <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 ml-2 text-gray-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
-          </svg>
-        </div>
-        <p class="text-sm text-gray-600">{{ activity.description }}</p>
-        <div class="text-xs text-gray-500 mt-1">
-          <span>Prioridad: {{ activity.priority }}</span> | 
-          <span>Estado: {{ activity.status }}</span>
-        </div>
-        <div class="text-xs text-gray-500 mt-1">
-          {{ activity.startDate | date:'shortDate' }} - {{ activity.endDate | date:'shortDate' }}
-        </div>
-      </div>
-      <div class="text-right">
-        <p class="text-xs text-gray-500">Asignados:</p>
-        <div class="text-sm font-medium text-gray-700" *ngFor="let user of activity.asignados">
-          {{ user }}
-        </div>
-        <!-- Botón para asignar tareas -->
-        <div class="flex justify-end mt-2">
-          <app-button 
-            text="Asignar tarea" 
-            icon="add"
-            aria-label="Asignar nueva tarea"
-            (click)="openAssignTaskModal(activity._id)">
-          </app-button>
+          } @else {
+          <div class="text-center text-gray-500 py-4 bg-gray-50 rounded-lg">
+            No hay actividades asignadas a este proyecto.
+          </div>
+          }
         </div>
       </div>
     </div>
-
-    <!-- Lista de tareas (se muestra cuando la actividad está expandida) -->
-    <div *ngIf="expandedActivities[activity._id]" class="mt-4 pl-6 border-l-2 border-blue-200">
-      <h5 class="text-sm font-medium text-gray-700 mb-2">Tareas asignadas:</h5>
-      
-      <div *ngIf="(tasksByActivity[activity._id]?.length || 0) > 0; else noTasks">
-        <div *ngFor="let task of tasksByActivity[activity._id]" class="bg-gray-50 rounded-lg p-3 mb-2">
-          <div class="flex justify-between items-start">
-            <div>
-              <h6 class="text-sm font-semibold text-gray-800">{{ task.title }}</h6>
-              <p class="text-xs text-gray-600">{{ task.description }}</p>
-              <div class="text-xs text-gray-500 mt-1">
-                <span>Prioridad: {{ task.prioridad }}</span> | 
-                <span>Estado: {{ task.status }}</span>
-              </div>
-              <div class="text-xs text-gray-500 mt-1">
-                Fecha límite: {{ task.fecha_limite | date:'shortDate' }}
-              </div>
-              <div *ngIf="task.instrucciones" class="text-xs text-gray-500 mt-1">
-                Instrucciones: {{ task.instrucciones }}
-              </div>
-            </div>
-            <div class="text-right">
-              <div class="text-xs text-gray-500">Asignados:</div>
-              <div class="text-xs font-medium text-gray-700" *ngFor="let user of task.asignados">
-                {{ user }}
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <ng-template #noTasks>
-        <div class="text-center text-sm text-gray-500 py-3">
-          No hay tareas asignadas a esta actividad.
-        </div>
-      </ng-template>
-    </div>
+    }
   </div>
-</div>
-
-<ng-template #noActivities>
-  <div class="text-center text-gray-500 py-4">
-    No hay actividades asignadas a este proyecto.
+  } @empty {
+  <div class="text-center py-8 bg-white rounded-lg shadow border border-gray-200">
+    <p class="text-gray-500">No hay proyectos disponibles</p>
+    <button (click)="openModal()" class="mt-4 text-blue-600 hover:text-blue-800 font-medium">
+      Crear primer proyecto
+    </button>
   </div>
-</ng-template>
-
-
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
+  }
 </div>

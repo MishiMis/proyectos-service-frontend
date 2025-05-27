@@ -12,6 +12,7 @@ export class TablaUsuarioComponent implements OnInit {
   totalUsers = 0;
   currentPage = 1;
   itemsPerPage = 5;
+  readonly Math = Math;
 
   constructor(private dataService: DataService) {}
 
@@ -26,6 +27,19 @@ export class TablaUsuarioComponent implements OnInit {
         this.totalUsers = res.total;
       },
       error: (err) => console.error('Error:', err)
+    });
+  }
+    toggleStatus(userId: string) {
+    this.dataService.toggleUserStatus(userId).subscribe({
+      next: (updatedUser) => {
+        const userIndex = this.users.findIndex(u => u._id === updatedUser._id);
+        if (userIndex !== -1) {
+          this.users[userIndex].isActive = updatedUser.isActive;
+        }
+      },
+      error: (err) => {
+        console.error('Error al cambiar el estado:', err);
+      }
     });
   }
 

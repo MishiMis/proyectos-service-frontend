@@ -15,19 +15,7 @@ import { MatSnackBar } from '@angular/material/snack-bar';
   styleUrl: './add-usuario.component.css'
 })
 export class AddUsuarioComponent {
-  formData: RegistrationForm = {
-    username: '',
-    password: '',
-    personalData: {
-      firstName: '',
-      lastName: '',
-      address: '',
-      phone: '',
-      dni: '',
-      birthDate: ''
-    }
-  };
-
+  formData: RegistrationForm = this.initFormData();
   isLoading = false;
 
   constructor(
@@ -37,7 +25,22 @@ export class AddUsuarioComponent {
     private snackBar: MatSnackBar
   ) {}
 
-  formValid(): boolean {
+  private initFormData(): RegistrationForm {
+    return {
+      username: '',
+      password: '',
+      personalData: {
+        firstName: '',
+        lastName: '',
+        address: '',
+        phone: '',
+        dni: '',
+        birthDate: ''
+      }
+    };
+  }
+
+  get formValid(): boolean {
     const { username, password, personalData } = this.formData;
     return !!(
       username?.trim() &&
@@ -52,45 +55,48 @@ export class AddUsuarioComponent {
   }
 
   onSubmit(): void {
-    if (this.formValid()) {
-      this.isLoading = true;
-      
-      const formattedData = {
-        ...this.formData,
-        personalData: {
-          ...this.formData.personalData,
-          birthDate: this.formatDate(this.formData.personalData.birthDate)
-        }
-      };
+    if (!this.formValid || this.isLoading) return;
 
-      this.dataService.createUser(formattedData).subscribe({
-        next: (response) => {
-          this.isLoading = false;
-          this.snackBar.open('Usuario creado exitosamente', 'Cerrar', {
-            duration: 3000
-          });
-          this.dialogRef.close(response);
-        },
-        error: (error) => {
-          this.isLoading = false;
-          this.snackBar.open(
-            `Error al crear usuario: ${error.message || 'Error desconocido'}`,
-            'Cerrar',
-            { duration: 5000 }
-          );
-          console.error('Error detallado:', error);
-        }
-      });
-    }
+    this.isLoading = true;
+    const formattedData = this.formatRequestData();
+
+    this.dataService.createUser(formattedData).subscribe({
+      next: (response) => this.handleSuccess(response),
+      error: (error) => this.handleError(error)
+    });
   }
 
   onCancel(): void {
     this.dialogRef.close();
   }
 
+  private formatRequestData() {
+    return {
+      ...this.formData,
+      personalData: {
+        ...this.formData.personalData,
+        birthDate: this.formatDate(this.formData.personalData.birthDate)
+      }
+    };
+  }
+
   private formatDate(dateString: string): string {
-    if (!dateString) return '';
-    const date = new Date(dateString);
-    return date.toISOString().split('T')[0];
+    return dateString ? new Date(dateString).toISOString().split('T')[0] : '';
+  }
+
+  private handleSuccess(response: any): void {
+    this.isLoading = false;
+    this.snackBar.open('Usuario creado exitosamente', 'Cerrar', { duration: 3000 });
+    this.dialogRef.close(response);
+  }
+
+  private handleError(error: any): void {
+    this.isLoading = false;
+    this.snackBar.open(
+      `Error al crear usuario: ${error.message || 'Error desconocido'}`,
+      'Cerrar',
+      { duration: 5000 }
+    );
+    console.error('Error detallado:', error);
   }
 }

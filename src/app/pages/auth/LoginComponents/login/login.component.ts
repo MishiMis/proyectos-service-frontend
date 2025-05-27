@@ -27,20 +27,20 @@ export class LoginComponent {
     this.hidePassword = !this.hidePassword;
   }
 
-  onSubmit(form: NgForm): void {
-    if (form.valid && !this.isLoading) {
-      this.isLoading = true;
-      
-      this.authService.login(this.model.username, this.model.password).subscribe({
-        next: () => {
-          this.router.navigate(['/index/dashboard']);
-          this.isLoading = false;
-        },
-        error: (error) => {
-          alert(error.message);
-          this.isLoading = false;
-        }
-      });
-    }
+onSubmit(form: NgForm): void {
+  if (form.valid && !this.isLoading) {
+    this.isLoading = true;
+    
+    this.authService.login(this.model.username, this.model.password).subscribe({
+      next: (response) => {
+        this.router.navigate(['/index/dashboard']);
+        this.isLoading = false;
+      },
+      error: (error) => {
+        alert(error.message || 'Error desconocido');
+        this.isLoading = false;
+      }
+    });
   }
+}
 }

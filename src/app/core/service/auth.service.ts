@@ -1,55 +1,47 @@
 import { Injectable, inject } from '@angular/core';
-import { HttpClient, HttpHeaders, HttpErrorResponse } from '@angular/common/http';
+import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { Observable, throwError } from 'rxjs';
 import { catchError, tap } from 'rxjs/operators';
 import { environment } from '../env/environment';
 import { CookieService } from 'ngx-cookie-service';
 
-@Injectable({
-  providedIn: 'root'
-})
+@Injectable({ providedIn: 'root' })
 export class AuthService {
   private http = inject(HttpClient);
   private cookieService = inject(CookieService);
 
-  login(username: string, password: string): Observable<any> {
-    const headers = new HttpHeaders({
-      'Content-Type': 'application/json'
-    });
+  private static readonly AUTH_TOKEN_KEY = 'authToken';
 
-    return this.http.post(
+  login(username: string, password: string): Observable<{ access_token: string }> {
+    return this.http.post<{ access_token: string }>(
       `${environment.apiUrl}/auth/login`,
       { username, password },
-      { headers }
+      { headers: { 'Content-Type': 'application/json' } }
     ).pipe(
-      tap((response: any) => {
-        if (response.token) {
-          this.setAuthToken(response.token);
-        }
-      }),
+      tap(({ access_token }) => this.setAuthToken(access_token)),
       catchError(this.handleError)
     );
   }
 
   setAuthToken(token: string): void {
-    this.cookieService.set('authToken', token, {
-      expires: 1,
+    this.cookieService.set(AuthService.AUTH_TOKEN_KEY, token, {
+      expires: 1, 
       path: '/',
-      secure: true, 
+      secure: true,
       sameSite: 'Strict'
     });
   }
 
   getAuthToken(): string {
-    return this.cookieService.get('authToken');
+    return this.cookieService.get(AuthService.AUTH_TOKEN_KEY);
   }
 
   logout(): void {
-    this.cookieService.delete('authToken', '/');
+    this.cookieService.delete(AuthService.AUTH_TOKEN_KEY, '/');
   }
 
   isLoggedIn(): boolean {
-    return this.cookieService.check('authToken');
+    return this.cookieService.check(AuthService.AUTH_TOKEN_KEY);
   }
 
   private handleError(error: HttpErrorResponse): Observable<never> {
