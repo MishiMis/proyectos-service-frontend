@@ -1,0 +1,88 @@
+<div class="fixed inset-0 bg-opacity-50 flex items-center justify-center p-4 z-50">
+  <div class="bg-white rounded-xl shadow-2xl w-full max-w-2xl max-h-[90vh] flex flex-col overflow-hidden">
+    <div class="bg-gradient-to-r from-blue-500 to-purple-600 p-4 shrink-0">
+      <h2 class="text-xl font-bold text-white">Asignar Nueva Tarea de Desarrollo</h2>
+    </div>
+
+    <form class="p-6 space-y-6 overflow-y-auto" (ngSubmit)="submit()">
+      <div class="space-y-4">
+        <app-input-field
+          label="Título de la Tarea"
+          [(ngModel)]="task.title"
+          name="title"
+          placeholder="Ej: Implementar autenticación JWT"
+          [required]="true"
+          color="blue"
+        ></app-input-field>
+
+        <app-input-field
+          label="Descripción Técnica"
+          [(ngModel)]="task.description"
+          name="description"
+          type="textarea"
+          placeholder="Detalla los requisitos técnicos, endpoints afectados y especificaciones..."
+          [required]="true"
+          color="indigo"
+        ></app-input-field>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <div>
+            <label class="block text-sm font-medium text-gray-700 mb-1">Nivel de Prioridad</label>
+            <select 
+              [(ngModel)]="task.prioridad" 
+              name="prioridad"
+              class="mt-1 block w-full pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm rounded-md"
+              required
+            >
+              <option value="">Selecciona prioridad</option>
+              <option value="bajo">Baja (mejora/refactor)</option>
+              <option value="medio">Media (nueva feature)</option>
+              <option value="alto">Alta (bug crítico)</option>
+            </select>
+          </div>
+
+          <app-input-field
+            label="Fecha de Entrega"
+            [(ngModel)]="task.fecha_limite"
+            name="fecha_limite"
+            type="date"
+            [required]="true"
+            color="blue"
+            placeholder="Selecciona fecha límite"
+          ></app-input-field>
+        </div>
+<label class="block text-sm font-medium text-gray-700 mt-4">Asignar a:</label>
+<select [(ngModel)]="task.asignados" name="asignados" multiple class="w-full border border-gray-300 rounded p-2">
+  <option *ngFor="let user of availableUsers" [value]="user">{{ user }}</option>
+</select>
+
+
+        <app-input-field
+          label="Instrucciones Técnicas"
+          [(ngModel)]="task.instrucciones"
+          name="instrucciones"
+          type="textarea"
+          placeholder="Branch a usar, convenciones de código, pruebas requeridas, dependencias..."
+          color="purple"
+        ></app-input-field>
+      </div>
+
+      <div class="bg-gray-50 px-6 py-4 flex justify-end gap-3 border-t border-gray-200 shrink-0">
+        <app-button-submit
+          label="Cancelar"
+          variant="secondary"
+          icon="close"
+          (click)="close()"
+        />
+
+        <app-button-submit
+          label="Asignar Tarea"
+          type="submit"
+          icon="check"
+          iconPosition="right"
+          [disabled]="!task.title || !task.description || !task.prioridad || !task.fecha_limite"
+        />
+      </div>
+    </form>
+  </div>
+</div>

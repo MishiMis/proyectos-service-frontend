@@ -1,47 +1,52 @@
-<div class="max-w-6xl mx-auto">
-  <div class="flex justify-between items-center mb-4 border-b pb-2">
-    <span class="text-sm text-gray-500">
-      {{ (currentPage - 1) * itemsPerPage + 1 }}-{{ currentPage * itemsPerPage > totalUsers ? totalUsers : currentPage * itemsPerPage }} de {{ totalUsers }}
-    </span>
+<div class="max-w-6xl mx-auto h-full flex flex-col" style="height: calc(100vh - 150px);">
+  <!-- Contenedor del contenido con scroll -->
+  <div class="flex-1 overflow-y-auto">
+    <div class="flex justify-between items-center mb-4 border-b pb-2">
+      <span class="text-sm text-gray-500">
+        {{ (currentPage - 1) * itemsPerPage + 1 }}-{{ currentPage * itemsPerPage > totalUsers ? totalUsers : currentPage * itemsPerPage }} de {{ totalUsers }}
+      </span>
+    </div>
+
+    <!-- Tabla -->
+    <div class="overflow-x-auto border border-[#A181FF]/20 rounded-lg mb-4">
+      <table class="min-w-full divide-y divide-[#A181FF]/10">
+        <thead class="bg-gradient-to-r from-[#4F39F6] to-[#BD7CFF]">
+          <tr>
+            <th class="px-6 py-3 text-left text-xs font-medium text-white uppercase tracking-wider">Nombre</th>
+            <th class="px-6 py-3 text-left text-xs font-medium text-white uppercase tracking-wider">Usuario</th>
+            <th class="px-6 py-3 text-left text-xs font-medium text-white uppercase tracking-wider">DNI</th>
+            <th class="px-6 py-3 text-left text-xs font-medium text-white uppercase tracking-wider">Teléfono</th>
+            <th class="px-6 py-3 text-left text-xs font-medium text-white uppercase tracking-wider">Estado</th>
+          </tr>
+        </thead>
+        <tbody class="bg-white divide-y divide-[#A181FF]/10">
+          <tr *ngFor="let user of paginatedUsers" class="hover:bg-[#BD7CFF]/5 transition-colors">
+            <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
+              {{ user.personalData.firstName }} {{ user.personalData.lastName }}
+            </td>
+            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-600">
+              {{ user.username }}
+            </td>
+            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-600">
+              {{ user.personalData.dni }}
+            </td>
+            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-600">
+              {{ user.personalData.phone }}
+            </td>
+            <td class="px-6 py-4 whitespace-nowrap">
+              <span class="px-2.5 py-0.5 rounded-full text-xs font-medium" 
+                    [ngClass]="user.isActive ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800'">
+                {{ user.isActive ? 'Activo' : 'Inactivo' }}
+              </span>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
   </div>
 
-  <div class="overflow-x-auto border border-[#A181FF]/20 rounded-lg">
-    <table class="min-w-full divide-y divide-[#A181FF]/10">
-      <thead class="bg-gradient-to-r from-[#4F39F6] to-[#BD7CFF]">
-        <tr>
-          <th class="px-6 py-3 text-left text-xs font-medium text-white uppercase tracking-wider">Nombre</th>
-          <th class="px-6 py-3 text-left text-xs font-medium text-white uppercase tracking-wider">Usuario</th>
-          <th class="px-6 py-3 text-left text-xs font-medium text-white uppercase tracking-wider">DNI</th>
-          <th class="px-6 py-3 text-left text-xs font-medium text-white uppercase tracking-wider">Teléfono</th>
-          <th class="px-6 py-3 text-left text-xs font-medium text-white uppercase tracking-wider">Estado</th>
-        </tr>
-      </thead>
-      <tbody class="bg-white divide-y divide-[#A181FF]/10">
-        <tr *ngFor="let user of paginatedUsers" class="hover:bg-[#BD7CFF]/5 transition-colors">
-          <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
-            {{ user.personalData.firstName }} {{ user.personalData.lastName }}
-          </td>
-          <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-600">
-            {{ user.username }}
-          </td>
-          <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-600">
-            {{ user.personalData.dni }}
-          </td>
-          <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-600">
-            {{ user.personalData.phone }}
-          </td>
-          <td class="px-6 py-4 whitespace-nowrap">
-            <span class="px-2.5 py-0.5 rounded-full text-xs font-medium" 
-                  [ngClass]="user.isActive ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800'">
-              {{ user.isActive ? 'Activo' : 'Inactivo' }}
-            </span>
-          </td>
-        </tr>
-      </tbody>
-    </table>
-  </div>
-
-  <div class="flex items-center justify-between mt-4 px-1">
+  <!-- Paginación (siempre visible en la parte inferior) -->
+  <div class="flex items-center justify-between mt-auto py-4 px-1 border-t border-gray-200 bg-white sticky bottom-0">
     <button (click)="currentPage = currentPage - 1"
             [disabled]="currentPage === 1"
             class="px-3 py-1 rounded border border-[#A181FF] text-sm text-[#4F39F6] disabled:opacity-50 disabled:cursor-not-allowed hover:bg-[#A181FF]/10 transition-colors">

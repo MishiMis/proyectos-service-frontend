@@ -2,7 +2,7 @@ import { NavItem } from './sidebar.model';
 
 export const NAV_ITEMS: NavItem[] = [
   {
-    path: 'dashboard', // Solo la ruta relativa
+    path: 'dashboard',
     title: 'Dashboard',
     icon: 'dashboard',
     activeClass: 'bg-gray-700 text-white'
@@ -14,9 +14,9 @@ export const NAV_ITEMS: NavItem[] = [
     activeClass: 'bg-gray-700 text-white'
   },
   {
-    path: 'puestos', // Solo la ruta relativa
-    title: 'Puestos',
-    icon: 'badge',
+    path: 'proyectos',
+    title: 'Proyectos',
+    icon: 'assignment',
     activeClass: 'bg-gray-700 text-white'
   }
 ];

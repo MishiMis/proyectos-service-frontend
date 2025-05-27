@@ -4,6 +4,7 @@ import { LoginComponent } from './pages/auth/LoginComponents/login/login.compone
 import { DashboardComponent } from './pages/DashboardComponents/dashboard/dashboard.component';
 import { authGuard } from './core/guards/auth.guard';
 import { UsuariosComponent } from './pages/ClientesComponent/usuarios/usuarios.component';
+import { ProyectosComponent } from './pages/ProyectosComponents/proyectos/proyectos.component';
 
 export const routes: Routes = [
   {
@@ -30,6 +31,11 @@ export const routes: Routes = [
         path: 'usuarios',
         component: UsuariosComponent,
         title: 'Usuarios'
+      },
+                  {
+        path: 'proyectos',
+        component: ProyectosComponent,
+        title: 'Proyectos'
       },
       {
         path: '',
